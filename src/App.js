@@ -1,25 +1,41 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import TodoList from './TodoList'
+
+import { observable, configure, action} from "mobx"
+
+
+configure({enforceActions: true})
+class TodoStore {
+  @observable todos = [
+    {
+      id: 1,
+      content: "One"
+    },
+    {
+      id: 2,
+      content: "Two"
+    }
+  ]
+
+  @action
+  addTodo = (todo) => {
+    this.todos.push(todo)
+  }
+  @action
+  deleteTodo = (id) => {
+    this.todos = this.todos.filter(item => item.id !== id)
+  }
+}
+
+const todoStore = new TodoStore();
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <TodoList store = {todoStore}/>
+    </React.Fragment>
   );
 }
 
